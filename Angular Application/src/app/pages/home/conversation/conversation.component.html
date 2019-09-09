@@ -1,0 +1,31 @@
+<div *ngIf='messageLoading' class="message-overlay">
+    <h3> {{selectedUser !== null && selectedUser.username ? 'Loading...' : usergroup == 2 ? ' Click to chat' : 'Click to chat with a doctor' }}</h3>
+    <button [style.visibility]="(usergroup == 2) ? 'hidden' : 'visible' " class="btn btn-sm btn-info" (click)="sendRequests($event)">{{usergroup != 2 ? 'Send Request to Doctor for Help' : ''}}</button>
+</div>
+<div class="massege-wrapper" *ngIf='!messageLoading'>
+    <div class="massege-container">
+        <div class="opposite-user" *ngIf="selectedUser !== null && selectedUser.username">
+            Chatting with {{selectedUser.username}}
+        </div>
+
+        <ul #messageThread class="message-thread" *ngIf="messages.length !== 0">
+            <li *ngFor="let message of messages" [class.align-right]="alignMessage(message.toUserId)">
+                {{ message.message}}
+            </li>
+        </ul>
+
+        <div class="message-thread start-chatting-banner" *ngIf="messages.length === 0">
+            <p class="heading">
+                You haven't chatted with {{selectedUser.username}} in a while,
+                <span class="sub-heading">Say Hi.</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="message-typer">
+        <form [formGroup]="messageForm" novalidate>
+            <textarea class="message form-control" placeholder="Type and hit Enter" (keyup)="sendMessage($event)" formControlName="message">
+			</textarea>
+        </form>
+    </div>
+</div>
